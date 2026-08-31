@@ -9,9 +9,8 @@ from google.genai import types
 # Inisialisasi SDK Google GenAI
 client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
 
-# Prompt dengan instruksi pencarian live hari ini
 prompt = """
-Cari berita dan rumor transfer sepak bola paling baru dan hangat dari jurnalis Fabrizio Romano (@FabrizioRomano) yang dilaporkan HARI INI di internet.
+Cari berita dan rumor transfer sepak bola paling baru dan hangat dari jurnalis Fabrizio Romano (@FabrizioRomano) di internet.
 
 Persyaratan Output:
 Kembalikan HANYA teks berbentuk JSON murni tanpa pembungkus markdown seperti ```json.
@@ -36,21 +35,21 @@ Gunakan format struktur persis seperti ini:
 }
 """
 
-# Fallback data
 default_fallback_data = {
   "here_we_go": [],
   "update_lain": []
 }
 
 try:
-    # Memanggil model gemini-2.5-flash dengan Search Grounding
-    response = client.models.generate_content(
-        model='gemini-2.5-flash',
-        contents=prompt,
+    # Membuat sesi chat untuk mendukung Automatic Function Calling (AFC) Google Search secara stabil
+    chat = client.chats.create(
+        model='gemini-3.6-flash',
         config=types.GenerateContentConfig(
             tools=[types.Tool(google_search=types.GoogleSearch())]
         )
     )
+    
+    response = chat.send_message(prompt)
 
     raw_text = response.text
     json_match = re.search(r'\{.*\}', raw_text, re.DOTALL)
