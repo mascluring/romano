@@ -2,7 +2,7 @@ name: Daily Transfer Update
 
 on:
   schedule:
-    - cron: '0 */2 * * *'
+    - cron: '0 */12 * * *'  # Berjalan otomatis setiap 12 jam sekali (jam 00:00 & 12:00 UTC / 07:00 & 19:00 WIB)
   workflow_dispatch:
 
 permissions:
