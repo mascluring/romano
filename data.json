@@ -1,7 +1,32 @@
-
 {
-  "tanggal": "31 Agustus 2026",
-  "last_updated": "Memuat...",
-  "here_we_go": [],
-  "update_lain": []
+  "here_we_go": [
+    {
+      "pemain": "Beto",
+      "klub_asal": "Everton",
+      "klub_tujuan": "Fiorentina",
+      "detail": "€17 juta permanen. Tes medis dijadwalkan."
+    },
+    {
+      "pemain": "Taylor Harwood-Bellis",
+      "klub_asal": "Southampton",
+      "klub_tujuan": "Aston Villa",
+      "detail": "£25 juta + £5 juta add-ons. Kesepakatan selesai."
+    }
+  ],
+  "update_lain": [
+    {
+      "pemain": "Cody Gakpo",
+      "klub_asal": "Liverpool",
+      "klub_tujuan": "Man City",
+      "detail": "Negosiasi masih berlanjut antara kedua klub."
+    },
+    {
+      "pemain": "Karim Benzema",
+      "klub_asal": "Al Ittihad",
+      "klub_tujuan": "-",
+      "detail": "Saling sepakat putus kontrak."
+    }
+  ],
+  "tanggal": "31 August 2026",
+  "last_updated": "31 August 2026, 09:59 WIB"
 }
