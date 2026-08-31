@@ -1,1 +1,57 @@
 
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rekap Bursa Transfer Fabrizio Romano</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #0f1419; color: #e7e9ea; margin: 0; padding: 20px; }
+        .container { max-width: 700px; margin: 0 auto; background: #16181c; border: 1px solid #2f3336; border-radius: 16px; padding: 25px; }
+        header { border-bottom: 1px solid #2f3336; padding-bottom: 15px; margin-bottom: 20px; }
+        h1 { font-size: 1.4em; color: #1d9bf0; margin: 0 0 5px 0; }
+        .subtitle { font-size: 0.9em; color: #71767b; }
+        .section-title { font-size: 1.1em; font-weight: bold; color: #ffd700; margin: 25px 0 12px 0; text-transform: uppercase; }
+        .section-title.process { color: #1d9bf0; }
+        ul { list-style-type: none; padding: 0; margin: 0; }
+        li { padding: 10px 0; border-bottom: 1px solid #212427; font-size: 0.95em; line-height: 1.5; }
+        li:last-child { border-bottom: none; }
+        .player { font-weight: bold; color: #ffffff; }
+        .transfer-path { color: #71767b; }
+        .detail { color: #d9d9d9; }
+        footer { margin-top: 30px; text-align: center; font-size: 0.8em; color: #71767b; border-top: 1px solid #2f3336; padding-top: 15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 id="title">Rekap Bursa Transfer Fabrizio Romano</h1>
+            <div class="subtitle" id="last-updated">Memuat data...</div>
+        </header>
+        <div class="section-title">🚨 Deal “Here we go” / Hampir final</div>
+        <ul id="here-we-go-list"></ul>
+        <div class="section-title process">⏳ Update lain / Masih dalam proses</div>
+        <ul id="update-lain-list"></ul>
+        <footer>Informasi diambil dari update terbaru @FabrizioRomano via Gemini AI</footer>
+    </div>
+    <script>
+        fetch('data.json')
+            .then(res => res.json())
+            .then(data => {
+                if (data.tanggal) document.getElementById('title').innerText = `Rekap Bursa Transfer Fabrizio Romano (per ${data.tanggal})`;
+                document.getElementById('last-updated').innerText = `Diperbarui otomatis: ${data.last_updated}`;
+                const hwgContainer = document.getElementById('here-we-go-list');
+                data.here_we_go.forEach(item => {
+                    const path = (item.klub_asal && item.klub_asal !== '-') ? ` (${item.klub_asal} → ${item.klub_tujuan})` : (item.klub_tujuan ? ` (→ ${item.klub_tujuan})` : '');
+                    hwgContainer.innerHTML += `<li><span class="player">${item.pemain}</span><span class="transfer-path">${path}</span> — <span class="detail">${item.detail}</span></li>`;
+                });
+                const processContainer = document.getElementById('update-lain-list');
+                data.update_lain.forEach(item => {
+                    const path = (item.klub_asal && item.klub_asal !== '-') ? ` (${item.klub_asal} → ${item.klub_tujuan})` : (item.klub_tujuan ? ` (→ ${item.klub_tujuan})` : '');
+                    processContainer.innerHTML += `<li><span class="player">${item.pemain}</span><span class="transfer-path">${path}</span> — <span class="detail">${item.detail}</span></li>`;
+                });
+            })
+            .catch(err => { document.getElementById('last-updated').innerText = 'Gagal memuat data transfer.'; });
+    </script>
+</body>
+</html>
