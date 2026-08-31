@@ -3,13 +3,15 @@ import json
 import re
 from datetime import datetime
 import pytz
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 
-# Konfigurasi Gemini API
-genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
+# Inisialisasi SDK Google GenAI
+client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
 
+# Prompt dengan instruksi pencarian live hari ini
 prompt = """
-Buatkan rekap berita dan rumor transfer sepak bola terbaru dari jurnalis Fabrizio Romano (@FabrizioRomano) dalam 24-48 jam terakhir.
+Cari berita dan rumor transfer sepak bola paling baru dan hangat dari jurnalis Fabrizio Romano (@FabrizioRomano) yang dilaporkan HARI INI di internet.
 
 Persyaratan Output:
 Kembalikan HANYA teks berbentuk JSON murni tanpa pembungkus markdown seperti ```json.
@@ -20,7 +22,7 @@ Gunakan format struktur persis seperti ini:
       "pemain": "Nama Pemain",
       "klub_asal": "Klub Asal",
       "klub_tujuan": "Klub Tujuan",
-      "detail": "Detail singkat transfer (misal: €15M permanent. Medical tes hari ini.)"
+      "detail": "Detail singkat transfer terkini."
     }
   ],
   "update_lain": [
@@ -34,57 +36,33 @@ Gunakan format struktur persis seperti ini:
 }
 """
 
-# Data Cadangan jika API mengalami kendala kuota
+# Fallback data
 default_fallback_data = {
-  "here_we_go": [
-    {
-      "pemain": "Beto",
-      "klub_asal": "Everton",
-      "klub_tujuan": "Fiorentina",
-      "detail": "€17 juta permanen. Tes medis dijadwalkan."
-    },
-    {
-      "pemain": "Taylor Harwood-Bellis",
-      "klub_asal": "Southampton",
-      "klub_tujuan": "Aston Villa",
-      "detail": "£25 juta + £5 juta add-ons. Kesepakatan selesai."
-    }
-  ],
-  "update_lain": [
-    {
-      "pemain": "Cody Gakpo",
-      "klub_asal": "Liverpool",
-      "klub_tujuan": "Man City",
-      "detail": "Negosiasi masih berlanjut antara kedua klub."
-    },
-    {
-      "pemain": "Karim Benzema",
-      "klub_asal": "Al Ittihad",
-      "klub_tujuan": "-",
-      "detail": "Saling sepakat putus kontrak."
-    }
-  ]
+  "here_we_go": [],
+  "update_lain": []
 }
 
 try:
-    # Menggunakan Gemini 1.5 Flash standar yang stabil di Free Tier
-    #model = genai.GenerativeModel('gemini-1.5-flash')
-    #model = genai.GenerativeModel('gemini-2.5-flash')
-    model = genai.GenerativeModel('gemini-3.6-flash')
-    response = model.generate_content(prompt)
+    # Memanggil model gemini-2.5-flash dengan Search Grounding
+    response = client.models.generate_content(
+        model='gemini-2.5-flash',
+        contents=prompt,
+        config=types.GenerateContentConfig(
+            tools=[types.Tool(google_search=types.GoogleSearch())]
+        )
+    )
 
-    # Pembersihan teks output dari Gemini
-    raw_text = response.text.replace('```json', '').replace('```', '').strip()
+    raw_text = response.text
     json_match = re.search(r'\{.*\}', raw_text, re.DOTALL)
 
     if json_match:
         data = json.loads(json_match.group(0))
     else:
-        print("Format JSON tidak ditemukan, menggunakan data cadangan.")
+        print("Format JSON tidak ditemukan, menggunakan fallback.")
         data = default_fallback_data
 
 except Exception as e:
-    print(f"Error memanggil Gemini API: {e}. Menggunakan data cadangan.")
+    print(f"Error memanggil Gemini Search API: {e}. Menggunakan fallback.")
     data = default_fallback_data
 
 # Tambahkan Timestamp WIB
@@ -93,8 +71,7 @@ now = datetime.now(wib)
 data['tanggal'] = now.strftime('%d %B %Y')
 data['last_updated'] = now.strftime('%d %B %Y, %H:%M WIB')
 
-# Simpan ke file data.json
 with open('data.json', 'w', encoding='utf-8') as f:
     json.dump(data, f, ensure_ascii=False, indent=2)
 
-print("File data.json berhasil diperbarui!")
+print("File data.json berhasil diperbarui dengan pencarian live!")
