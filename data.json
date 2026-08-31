@@ -1,32 +1,38 @@
 {
   "here_we_go": [
     {
-      "pemain": "Beto",
-      "klub_asal": "Everton",
-      "klub_tujuan": "Fiorentina",
-      "detail": "€17 juta permanen. Tes medis dijadwalkan."
+      "pemain": "Wojciech Szczęsny",
+      "klub_asal": "Tanpa Klub (Eks-Juventus)",
+      "klub_tujuan": "FC Barcelona",
+      "detail": "Kesepakatan penuh tercapai untuk bergabung sebagai pengganti Marc-André ter Stegen yang cedera. Kontrak berdurasi 1 tahun, tes medis dijadwalkan segera."
     },
     {
-      "pemain": "Taylor Harwood-Bellis",
-      "klub_asal": "Southampton",
-      "klub_tujuan": "Aston Villa",
-      "detail": "£25 juta + £5 juta add-ons. Kesepakatan selesai."
+      "pemain": "Adrien Rabiot",
+      "klub_asal": "Tanpa Klub (Eks-Juventus)",
+      "klub_tujuan": "Olympique Marseille",
+      "detail": "Transfer bebas biaya disepakati secara lisan untuk kontrak berdurasi 2 tahun hingga Juni 2026. Tes medis rampung."
     }
   ],
   "update_lain": [
     {
-      "pemain": "Cody Gakpo",
+      "pemain": "Trent Alexander-Arnold",
       "klub_asal": "Liverpool",
-      "klub_tujuan": "Man City",
-      "detail": "Negosiasi masih berlanjut antara kedua klub."
+      "klub_tujuan": "Real Madrid",
+      "detail": "Real Madrid terus mengawasi situasi kontraknya yang akan berakhir pada Juni 2025. Liverpool masih memprioritaskan negosiasi perpanjangan kontrak."
     },
     {
-      "pemain": "Karim Benzema",
-      "klub_asal": "Al Ittihad",
-      "klub_tujuan": "-",
-      "detail": "Saling sepakat putus kontrak."
+      "pemain": "Viktor Gyökeres",
+      "klub_asal": "Sporting CP",
+      "klub_tujuan": "Arsenal / Chelsea",
+      "detail": "Sporting CP menegaskan tidak akan melepas sang striker di bawah klausul rilis €100 juta pada bursa transfer mendatang."
+    },
+    {
+      "pemain": "Jamal Musiala",
+      "klub_asal": "Bayern Munchen",
+      "klub_tujuan": "Manchester City",
+      "detail": "Bayern sedang memproses proposal kontrak baru jangka panjang dengan kenaikan gaji signifikan untuk memagari Musiala dari ketertarikan klub Premier League."
     }
   ],
   "tanggal": "31 August 2026",
-  "last_updated": "31 August 2026, 14:17 WIB"
+  "last_updated": "31 August 2026, 14:22 WIB"
 }
