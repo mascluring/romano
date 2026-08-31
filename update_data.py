@@ -68,7 +68,8 @@ default_fallback_data = {
 
 try:
     # Menggunakan Gemini 1.5 Flash standar yang stabil di Free Tier
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    #model = genai.GenerativeModel('gemini-1.5-flash')
+    model = genai.GenerativeModel('gemini-2.5-flash')
     response = model.generate_content(prompt)
 
     # Pembersihan teks output dari Gemini
