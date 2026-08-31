@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -34,24 +33,53 @@
         <ul id="update-lain-list"></ul>
         <footer>Informasi diambil dari update terbaru @FabrizioRomano via Gemini AI</footer>
     </div>
+
     <script>
-        fetch('data.json')
-            .then(res => res.json())
-            .then(data => {
-                if (data.tanggal) document.getElementById('title').innerText = `Rekap Bursa Transfer Fabrizio Romano (per ${data.tanggal})`;
-                document.getElementById('last-updated').innerText = `Diperbarui otomatis: ${data.last_updated}`;
-                const hwgContainer = document.getElementById('here-we-go-list');
-                data.here_we_go.forEach(item => {
-                    const path = (item.klub_asal && item.klub_asal !== '-') ? ` (${item.klub_asal} → ${item.klub_tujuan})` : (item.klub_tujuan ? ` (→ ${item.klub_tujuan})` : '');
-                    hwgContainer.innerHTML += `<li><span class="player">${item.pemain}</span><span class="transfer-path">${path}</span> — <span class="detail">${item.detail}</span></li>`;
-                });
-                const processContainer = document.getElementById('update-lain-list');
-                data.update_lain.forEach(item => {
-                    const path = (item.klub_asal && item.klub_asal !== '-') ? ` (${item.klub_asal} → ${item.klub_tujuan})` : (item.klub_tujuan ? ` (→ ${item.klub_tujuan})` : '');
-                    processContainer.innerHTML += `<li><span class="player">${item.pemain}</span><span class="transfer-path">${path}</span> — <span class="detail">${item.detail}</span></li>`;
-                });
+        // Menggunakan path relatif ./data.json agar sesuai dengan sub-folder GitHub Pages (/romano/)
+        fetch('./data.json?v=' + new Date().getTime())
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('HTTP error status: ' + res.status);
+                }
+                return res.json();
             })
-            .catch(err => { document.getElementById('last-updated').innerText = 'Gagal memuat data transfer.'; });
+            .then(data => {
+                if (data.tanggal) {
+                    document.getElementById('title').innerText = `Rekap Bursa Transfer Fabrizio Romano (per ${data.tanggal})`;
+                }
+                document.getElementById('last-updated').innerText = `Diperbarui otomatis: ${data.last_updated}`;
+
+                const hwgContainer = document.getElementById('here-we-go-list');
+                const processContainer = document.getElementById('update-lain-list');
+                hwgContainer.innerHTML = '';
+                processContainer.innerHTML = '';
+
+                if (data.here_we_go && data.here_we_go.length > 0) {
+                    data.here_we_go.forEach(item => {
+                        const path = (item.klub_asal && item.klub_asal !== '-') 
+                            ? ` (${item.klub_asal} → ${item.klub_tujuan})` 
+                            : (item.klub_tujuan ? ` (→ ${item.klub_tujuan})` : '');
+                        hwgContainer.innerHTML += `<li><span class="player">${item.pemain}</span><span class="transfer-path">${path}</span> — <span class="detail">${item.detail}</span></li>`;
+                    });
+                } else {
+                    hwgContainer.innerHTML = '<li>Belum ada data "Here We Go" terbaru.</li>';
+                }
+
+                if (data.update_lain && data.update_lain.length > 0) {
+                    data.update_lain.forEach(item => {
+                        const path = (item.klub_asal && item.klub_asal !== '-') 
+                            ? ` (${item.klub_asal} → ${item.klub_tujuan})` 
+                            : (item.klub_tujuan ? ` (→ ${item.klub_tujuan})` : '');
+                        processContainer.innerHTML += `<li><span class="player">${item.pemain}</span><span class="transfer-path">${path}</span> — <span class="detail">${item.detail}</span></li>`;
+                    });
+                } else {
+                    processContainer.innerHTML = '<li>Belum ada data rumor lain.</li>';
+                }
+            })
+            .catch(err => {
+                console.error('Fetch error:', err);
+                document.getElementById('last-updated').innerText = 'Gagal memuat data transfer. Pastikan file data.json ada di repositori.';
+            });
     </script>
 </body>
 </html>
